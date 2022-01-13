@@ -1,0 +1,7 @@
+.buildconfig
+meason.build
+copying
+.env.json
+.env
+__pycache__/
+__pycache__

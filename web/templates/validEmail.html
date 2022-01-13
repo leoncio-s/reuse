@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Validando E-mail
+{% endblock title %}
+
+{% block content %}
+
+
+<div class="row">
+    {% with messages = get_flashed_messages() %}
+    {% if  messages %}
+    <div class="row error-page">
+        <ul class=flashes>
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+    </div>
+    {% endif %}
+    {% endwith %}
+
+
+    <p style='font-size:1.2rem;'>
+        Foi enviado um email para <span style='font-weight: 700; text-decoration:underline;'>{{ user.email }}</span> com um código de confirmação
+    </p>
+    {% if action %}
+        <form action="{{ url_for(action) }}" class="col s12" method="POST" id='token'>
+    {% else %}
+        <form action="{{ url_for('valida') }}" class="col s12" method="POST" id='token'>
+    {% endif %}
+         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <h4 style="text-align: center;">
+            Codigo de validação
+        </h4>
+        <div class="code">
+            <input type="text" name="code1" id="code1" maxlength="1" minlength="1" class='code' required='True'  >
+            <input type="text" name="code2" id="code2" maxlength="1" minlength="1" class='code' required='True' oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+            <input type="text" name="code3" id="code3" maxlength="1" minlength="1" class='code' required='True' oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+            <input type="text" name="code4" id="code4" maxlength="1" minlength="1" class='code' required='True' oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+            <input type="text" name="code5" id="code5" maxlength="1" minlength="1" class='code' required='True' oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+            <input type="text" name="code6" id="code6" maxlength="1" minlength="1" class='code' required='True' oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+        </div>
+        <div class="buttons">
+            {% if token %}
+                <a class="btn waves-effect waves-light reenvia" href='{{ url_for(token)}}'>REENVIAR CÓDIGO
+                    <i class="material-icons left">refresh</i>
+                </a>
+            {% else %}
+                <a class="btn waves-effect waves-light reenvia" href='{{ url_for("reenvia")}}'>REENVIAR CÓDIGO
+                    <i class="material-icons left">refresh</i>
+                </a>
+            {% endif %}
+
+            <button class="btn waves-effect waves-light disabled" type="submit" name="validar">Validar
+                <i class="material-icons right">send</i>
+            </button>
+        </div>
+    </form>
+</div>
+
+
+{% endblock content %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        
+        var inp = document.querySelectorAll("form#token input")
+
+        inp.forEach(e=>{
+            $(e).on("keyup", ev=>{
+                e.value = e.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
+                if (e.value.match(/\d/) != null){
+                    $(ev.target.nextElementSibling).focus()
+                    if (ev.target.nextElementSibling == null)
+                    {
+                        $("button[name='validar']").removeClass("disabled")
+                    }
+                }
+            })
+        })
+            
+
+
+        function next(input){
+            //linput
+            var inputs = $('form input').keyup((e)=>{
+                console.log();
+                
+                if (e.which in [48,49,50,51,52,53,54,55,56,57]) {
+                    
+                    var nextInput = inputs.get(inputs.index(this) + 1);
+                    if (nextInput) {
+                        //nextInput.focus();
+                        
+                    }
+            }
+    
+            })
+        }
+        
+     </script>  
+{% endblock scripts %}
+
+

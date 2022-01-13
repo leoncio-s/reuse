@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% block head %}
+    {{ super() }}
+
+    <style>
+        .medidor{
+            min-width: 100px;
+            min-height: 100px;
+            max-width: 200px;
+            max-height: 200px;
+            width: 150px;
+            height: 150px;
+            display: flex;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+            border: 0;
+            padding:5px;
+            border-radius: 100%;
+            background: linear-gradient(to top, rgb(16, 128, 16) 50%, #fcba04, hsla(0, 100%, 50%, 0.831) 50%), linear-gradient(to top, rgb(16, 128, 16),#fcba04, rgba(249, 44, 44, 0.687))
+            /*mask-composite: exclude*/; 
+        }
+        .medidor span{
+            width: 90%;
+            height: 90%;
+            background-color: #fff;
+            border-radius: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+        .monitors{
+            display: flex;
+            justify-content: space-between;
+        }
+        #qta{
+            background: linear-gradient(to top, hsla(196, 100%, 48%, 0.831) 80%, rgb(149, 231, 254) 50%), linear-gradient(to top, rgb(149, 231, 254) 20%,hsla(196, 100%, 48%, 0.831));
+        }
+        #qla{
+            background: linear-gradient(to top, hsla(6, 100%, 54%, 0.831) 0, rgb(55, 255, 0) 30%, rgb(0, 53, 169))
+        }
+
+        table tbody tr td:nth-child(1){text-align: left !important;}
+        table tbody tr td:nth-child(2){text-align: center;}
+        table tbody tr td:nth-child(3){text-align: right !important;}
+        table tbody tr td button
+        {
+            Width: 100px;
+        }
+        table tbody tr td button[name='A']
+        {
+            background-color: hsla(196, 100%, 48%);
+        }
+        table tbody tr td button[name='F']
+        {
+            background-color: hsl(6, 100%, 54%);
+        }
+        table tbody tr td button:hover
+        {
+            background-color: var(--bg-color);
+        }
+
+        table tbody tr td button[name='I']
+        {
+            background-color: hsla(6, 100%, 54%, 0.75);
+        }
+
+        @media (max-width:600px) {
+            .monitors{
+                display: grid;
+                grid-template-rows: repeat(2, 1fr);
+                grid-template-columns: repeat(2, 1fr);
+                grid-row-gap: 20px;
+            }
+        }
+
+    </style>
+{% endblock head %}
+{% block title %}
+Dashboard
+{% endblock title %}Dashboard
+
+{% block menu %}
+    <li><a href="">Perfil <i class="tiny material-icons">person</i></a></li>
+    <li><a href="/logout">Sair <i class="tiny material-icons">exit_to_app</i></a></li>
+{% endblock menu %}
+{% block mobilenav %}
+    <li><a href="">Perfil <i class="tiny material-icons">person</i></a></li>
+    <li><a href="/logout">Sair <i class="tiny material-icons">exit_to_app</i></a></li>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <h3>DASHBOARD</h3>
+</div>
+
+<div class="row monitors">
+    <div class="col s12 m3 13">
+        <span for="">QUANTIDADE DE ÁGUA</span>
+       <div id='qta' class='medidor'><span>80%</span></div>
+    </div>
+    <div class="col s12 m3 13">
+        <span for="">PH DA ÁGUA</span>
+       <div id='qla' class='medidor'><span>7.3</span></div>
+    </div>
+    <div class="col s12 m3 13">
+        <span for="temp">TEMPERATURA DA CPU</span>
+       <div id='temp' class='medidor'><span>00</span></div>
+    </div>
+</div>
+
+<div class="row" style="margin-top: 50px">
+    <h4>SENSORES</h4>
+    <table class="striped">
+        <thead>
+            <td style="text-align: left">SENSOR</td>
+            <td style="text-align: center">STATUS</td>
+            <td style="text-align: right">ALTERAR</td>
+        </thead>
+    <tbody>
+        <tr>
+            <td>Solenoide-1</td>
+            <td>F</td>
+            <td><button class='btn' name='A'>Abrir</button></td>
+        </tr>
+        <tr>
+            <td>Solenoide-2</td>
+            <td>A</td>
+            <td><button class='btn' name='F'>Fechar</button></td>
+        </tr>
+        <tr>
+            <td>Solenoide-3</td>
+            <td>I</td>
+            <td><button class='btn disabled' name='I'>Ativar</button></td>
+        </tr>
+    </tbody>
+    </table>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+    {{ super() }}
+<script type="text/javascript">
+    
+    async function temp ()  {
+        $.getJSON(await "{{ url_for('temp') }}", {
+            dataType:"json"})
+            .done( (b)=>{
+                $('#temp span').text(b.temp + "º")
+                siza = (100 - b.temp) * 1 
+                $('#temp').css("background", "linear-gradient(to top, rgb(16, 128, 16)" + siza + "%, #fcba04, hsla(0, 100%, 50%, 0.831) "+ b.temp + "%), linear-gradient(to bottom, rgb(16, 128, 16), #fcba04, hsla(0, 100%, 50%, 0.831)  )")
+            })
+        }
+
+
+    setInterval(async ()=>{
+        await temp()
+    }, 5000)
+    
+
+
+</script>
+{% endblock scripts %}

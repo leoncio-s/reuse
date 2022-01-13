@@ -1,0 +1,83 @@
+:root{
+    --bg-color: #007780;
+    --tx-color: #595959;
+}
+body{
+    min-height: 100vh;
+}
+
+.nav-wrapper {
+    padding: 0 10px;
+    background-color: var(--bg-color);
+}
+
+.nav-wrapper ul li{
+    min-width: 85px;
+}
+
+.nav-wrapper ul li a{
+    width: 100%;
+    display: inline-flex;
+    justify-content: space-between;
+}
+
+div.container .row:first-child{
+
+    margin-top: 20px;
+}
+
+form .buttons{
+    width: 100%;
+    display:flex;
+    justify-content: space-between;
+}
+
+.progress {
+    margin-top: 50px;
+}
+
+.error-page{
+    color: var(--tx-color);
+    background-color: #fe9494;
+    z-index: 999;
+    margin: 0 auto !important;
+    top: 30px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+}
+
+
+.codigo{
+    width: 90%;
+    height: 50px;
+    background-color: var(--bg-color);
+    color: white;
+    font-size: 1.5rem;
+}
+
+div.code{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 20px auto
+}
+
+input.code{
+    width: 3rem !important;
+    font-size: 2rem !important;
+    text-align:center;
+    margin: 0 5px;
+}
+
+.page-footer{
+    position:absolute;
+    bottom: 0;
+    margin: 50px 0 0 0;
+    background-color: var(--bg-color);
+}
+
+.sidenav{
+    z-index: 99999;
+    padding-top: 50px;
+}

@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block head %}
+        {{ super() }}
+{% endblock head %}
+
+{% block title %}
+{{title}}
+{% endblock title %}
+
+{% block menu %}
+<li>
+    <a class="btn waves-effect waves-light" href='/' style="width:auto">Login
+        <i class="tiny material-icons">account_box</i>
+    </a>
+</li>
+{% endblock menu %}
+
+
+
+{% block content %}
+
+<div class="row">
+
+    {% with messages = get_flashed_messages() %}
+    {% if  messages %}
+    <div class="row error-page">
+        <ul class="flashes">
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+            {% for field in form.fields.errors %}
+            <li>{{ field }}</li>
+            {% endfor %}
+            </ul>
+    </div>
+    {% endif %}
+    {% endwith %}
+
+
+    <div class="progress hide">
+        <div class="indeterminate"></div>
+    </div>
+
+    <form action='{{ url_for(action) }}' class="col s12" method="POST" id='cadastro'>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        {% for field in form %}
+            {% if field.name == 'csrf_token' %}
+                        {{ field }}
+            {% else %}
+                <div class="row">
+                    <div class="input-field col s12">
+                            {{ field }}
+                            {{ field.label }}    
+                    </div>
+
+                {% if  field.errors %}
+                <div class="row error-page">
+                    <ul class="flashes">
+                        {% for errors in field.errors %}
+                        <li>{{ errors }}</li>
+                        {% endfor %}
+                        </ul>
+                </div>
+                {% endif %}
+                </div>
+            {% endif %}
+        {% endfor %}
+        <div class="buttons" style="justify-content:flex-end; margin-bottom: 50px">
+            <button class="btn waves-effect waves-light disabled" type="submit" name="cadastrar">{{title}}
+                <i class="material-icons right">send</i>
+            </button>
+        </div>
+    </form>
+
+</div>
+{% endblock content %}
+
+
+
+{% block scripts %}
+    {{ super() }}
+    <script type="text/javascript" src="/js/login.js"></script>
+{% endblock scripts %}
